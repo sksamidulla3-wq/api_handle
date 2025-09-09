@@ -41,7 +41,7 @@ class ProductModel {
   num? rate;
   int? stock;
   List<dynamic>? images;
-
+//
   ProductModel({
     required this.brand,
     required this.category,
