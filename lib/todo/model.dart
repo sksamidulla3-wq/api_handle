@@ -13,7 +13,7 @@ class DataTodoModel {
 
   factory DataTodoModel.fromJson(Map<String, dynamic> json) {
     List<TodoModel> listTodo = [];
-    for (Map<String, dynamic> each in json["todo"]) {
+    for (Map<String, dynamic> each in json["todos"]) {
       listTodo.add(TodoModel.fromJson(each));
     }
     return DataTodoModel(
@@ -26,7 +26,7 @@ class DataTodoModel {
 }
 
 class TodoModel {
-  String? completed;
+  bool? completed;
   String? todo;
   int? id;
 

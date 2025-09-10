@@ -1,9 +1,8 @@
 import 'dart:convert';
-
+import 'package:api_handle/quotesModel/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as httpClient;
 
-import 'api models/data_model.dart';
 
 void main() {
   runApp(const MyApp());

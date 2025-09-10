@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:api_handle/todo/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as httpClient;
+import 'detail.dart';
+import 'model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,15 +27,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -42,31 +34,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DataTodoModel? dataTodoModel;
+  CartsModel? cartsModel;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getTodos();
+    getProductsCarts();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: dataTodoModel != null && dataTodoModel!.todos!.isNotEmpty
+      body: cartsModel != null && cartsModel!.carts!.isNotEmpty
           ? ListView.builder(
-              itemCount: dataTodoModel!.todos!.length,
+              itemCount: cartsModel!.carts!
+                  .expand((cart) => cart.products!)
+                  .length,
+              shrinkWrap: true,
               itemBuilder: (ctx, index) {
-                var todo = dataTodoModel!.todos![index];
+                var product = cartsModel!.carts!
+                    .expand((cart) => cart.products!)
+                    .toList()[index];
+
                 return Card(
                   child: ListTile(
-                    title: Text(todo.todo!),
-                    subtitle: Text(
-                      todo.completed! == true ? "Completed" : "Not Completed",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => Details(thisProduct: product),
+                        ),
+                      );
+                    },
+                    title: Text(product.title!),
+                    subtitle: Text(product.price.toString()),
+                    leading: Image.network(
+                      product.thumbnail!,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
                     ),
+                    trailing: Text(product.quantity.toString()),
                   ),
                 );
               },
@@ -75,11 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void getTodos() async {
-    var uri = Uri.parse("https://dummyjson.com/todos");
+  void getProductsCarts() async {
+    var uri = Uri.parse("https://dummyjson.com/carts");
     var response = await httpClient.get(uri);
     if (response.statusCode == 200) {
-      dataTodoModel = DataTodoModel.fromJson(jsonDecode(response.body));
+      cartsModel = CartsModel.fromJson(jsonDecode(response.body));
       setState(() {});
     }
   }
