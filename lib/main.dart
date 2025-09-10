@@ -1,8 +1,16 @@
 import 'dart:convert';
+<<<<<<< HEAD
 import 'package:api_handle/quotesModel/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as httpClient;
 
+=======
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as httpClient;
+
+import 'api models/data_model.dart';
+>>>>>>> 4c9a5b378e30b6c9c3c1efe9d207cbb3963bdf32
 
 void main() {
   runApp(const MyApp());
